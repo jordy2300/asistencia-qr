@@ -5,12 +5,13 @@ class AsistenciaConfig(AppConfig):
     name = 'asistencia'
 
     def ready(self):
-        from django.conf import settings
-        if not settings.DEBUG:
-            return
+        import os
         try:
             from django.contrib.auth.models import User
-            if settings.ADMIN_USER and not User.objects.filter(username=settings.ADMIN_USER).exists():
-                User.objects.create_superuser(settings.ADMIN_USER, '', settings.ADMIN_PASSWORD)
+            admin_user = os.environ.get('ADMIN_USER', '')
+            admin_pass = os.environ.get('ADMIN_PASSWORD', '')
+            if admin_user and admin_pass:
+                if not User.objects.filter(username=admin_user).exists():
+                    User.objects.create_superuser(admin_user, '', admin_pass)
         except Exception:
             pass
