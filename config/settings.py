@@ -98,3 +98,8 @@ TWILIO_PHONE_NUMBER = os.environ.get('TWILIO_PHONE_NUMBER', '')
 SMS_BACKEND = os.environ.get('SMS_BACKEND', 'console')  # 'console' o 'twilio'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
+# Auto-crear superusuario en producción
+import os
+if not DEBUG:
+    ADMIN_USER = os.environ.get('ADMIN_USER', '')
+    ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', '')
