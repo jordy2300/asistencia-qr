@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iniciar Sesión</title>
+{% load static %}
+<link rel="stylesheet" href="{% static 'asistencia/css/main.css' %}">
+</head>
+<body class="login-body">
+<div class="login-card">
+  <div class="login-logo">📋</div>
+  <h1>Control de Asistencia</h1>
+  <p class="login-sub">Panel Administrativo</p>
+  {% if form.errors %}
+  <div class="alert alert-error">Usuario o contraseña incorrectos.</div>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label>Usuario</label>
+      <input type="text" name="username" autofocus required class="form-control" placeholder="admin">
+    </div>
+    <div class="form-group">
+      <label>Contraseña</label>
+      <input type="password" name="password" required class="form-control" placeholder="••••••">
+    </div>
+    <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+  </form>
+</div>
+</body>
+</html>

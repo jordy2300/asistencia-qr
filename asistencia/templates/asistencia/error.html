@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Error</title>
+{% load static %}
+<link rel="stylesheet" href="{% static 'asistencia/css/mobile.css' %}">
+</head>
+<body>
+<div class="mobile-card">
+  <div style="font-size:3rem">⚠</div>
+  <h2>Acceso No Válido</h2>
+  <p class="sub">{{ mensaje }}</p>
+  <p class="sub" style="color:#888;font-size:.85rem">Contacte a Recursos Humanos si considera que esto es un error.</p>
+</div>
+</body>
+</html>

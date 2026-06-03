@@ -1,0 +1,56 @@
+{% extends "asistencia/base.html" %}
+{% block title %}Gestión QR{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Gestión de Código QR</h1>
+</div>
+
+<div class="two-col">
+  <div class="card">
+    <h2>QR Activo</h2>
+    {% if qr_activo and qr_imagen %}
+      <div class="qr-container">
+        <img src="data:image/png;base64,{{ qr_imagen }}" alt="Código QR" class="qr-img">
+      </div>
+      <p class="qr-info">Vence: <strong>{{ qr_activo.fecha_vencimiento|date:"d/m/Y H:i" }}</strong></p>
+      <p class="qr-token">Token: <code>{{ qr_activo.token|slice:":16" }}…</code></p>
+      <form method="post" action="{% url 'invalidar_qr' qr_activo.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger" onclick="return confirm('¿Invalidar este QR?')">🗑 Invalidar QR</button>
+      </form>
+    {% else %}
+      <p class="empty-msg">No hay un QR activo.</p>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Generar Nuevo QR</h2>
+    <form method="post" action="{% url 'generar_nuevo_qr' %}">
+      {% csrf_token %}
+      <div class="form-group">
+        <label>Días de vigencia</label>
+        <input type="number" name="dias_vigencia" value="30" min="1" max="365" class="form-control">
+      </div>
+      <p class="warning-text">⚠ Esto invalidará el QR actual.</p>
+      <button type="submit" class="btn btn-primary">🔄 Generar QR</button>
+    </form>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Historial de QR</h2>
+  <table class="table">
+    <thead><tr><th>Token</th><th>Estado</th><th>Creado</th><th>Vence</th></tr></thead>
+    <tbody>
+    {% for qr in historial %}
+    <tr>
+      <td><code>{{ qr.token|slice:":16" }}…</code></td>
+      <td><span class="badge {% if qr.activo %}badge-validado{% else %}badge-rechazado{% endif %}">{% if qr.activo %}Activo{% else %}Inactivo{% endif %}</span></td>
+      <td>{{ qr.fecha_creacion|date:"d/m/Y H:i" }}</td>
+      <td>{% if qr.fecha_vencimiento %}{{ qr.fecha_vencimiento|date:"d/m/Y" }}{% else %}—{% endif %}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

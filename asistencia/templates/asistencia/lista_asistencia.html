@@ -1,0 +1,43 @@
+{% extends "asistencia/base.html" %}
+{% block title %}Registros de Asistencia{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Registros de Asistencia</h1>
+  <span class="badge-count">{{ total }} registros</span>
+</div>
+
+<div class="filter-bar">
+  <form method="get" class="filter-form">
+    <input type="text" name="q" value="{{ busqueda }}" placeholder="Buscar por nombre o cédula…" class="form-control">
+    <input type="date" name="desde" value="{{ fecha_desde }}" class="form-control">
+    <input type="date" name="hasta" value="{{ fecha_hasta }}" class="form-control">
+    <label class="check-label">
+      <input type="checkbox" name="tarde" value="1" {% if solo_tarde == '1' %}checked{% endif %}> Solo tardanzas
+    </label>
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+    <a href="{% url 'lista_asistencia' %}" class="btn">Limpiar</a>
+  </form>
+  <a href="{% url 'exportar_excel' %}?q={{ busqueda }}&desde={{ fecha_desde }}&hasta={{ fecha_hasta }}" class="btn btn-green">⬇ Exportar Excel</a>
+</div>
+
+<table class="table">
+  <thead>
+    <tr><th>Técnico</th><th>Cédula</th><th>Fecha</th><th>Hora</th><th>Estado</th><th>Distancia</th><th>IP</th></tr>
+  </thead>
+  <tbody>
+  {% for r in registros %}
+  <tr {% if r.tarde %}class="row-late"{% endif %}>
+    <td>{{ r.tecnico.nombre }}</td>
+    <td>{{ r.tecnico.cedula }}</td>
+    <td>{{ r.fecha|date:"d/m/Y" }}</td>
+    <td>{{ r.hora_registro|time:"H:i:s" }} {% if r.tarde %}<span class="badge-late">Tarde</span>{% endif %}</td>
+    <td><span class="badge badge-{{ r.estado }}">{{ r.get_estado_display }}</span></td>
+    <td>{% if r.distancia_metros %}{{ r.distancia_metros }}m{% endif %}</td>
+    <td class="small-text">{{ r.ip_dispositivo }}</td>
+  </tr>
+  {% empty %}
+  <tr><td colspan="7" class="empty-msg">No hay registros con los filtros aplicados.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

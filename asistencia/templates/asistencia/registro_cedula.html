@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Registro de Asistencia</title>
+{% load static %}
+<link rel="stylesheet" href="{% static 'asistencia/css/mobile.css' %}">
+</head>
+<body>
+<div class="mobile-card" id="step-cedula">
+  <div class="mobile-logo">📋</div>
+  <h1>Registro de Asistencia</h1>
+  <p class="sub">Ingrese su número de cédula para continuar</p>
+
+  <div id="geo-status" class="geo-status">📍 Obteniendo ubicación…</div>
+
+  <div class="form-group">
+    <label>Número de Cédula</label>
+    <input type="number" id="cedula" class="form-control-mobile" placeholder="Ej: 1000000000" inputmode="numeric">
+  </div>
+
+  <button id="btn-continuar" class="btn-mobile" onclick="verificarCedula()">Continuar →</button>
+  <div id="error-msg" class="error-msg"></div>
+</div>
+
+<div class="mobile-card hidden" id="step-otp">
+  <div class="mobile-logo">📱</div>
+  <h2>Verificación SMS</h2>
+  <p class="sub">Se envió un código de 6 dígitos al número <strong id="celular-display"></strong></p>
+  <p class="sub" id="nombre-display" style="color:#1F4E79;font-weight:bold;"></p>
+
+  <div class="form-group">
+    <label>Código OTP</label>
+    <input type="number" id="otp" class="form-control-mobile otp-input" placeholder="000000" maxlength="6" inputmode="numeric">
+  </div>
+
+  <div id="otp-timer" class="otp-timer">⏱ Válido por 5 minutos</div>
+  <div id="otp-dev" class="otp-dev-hint hidden"></div>
+
+  <button class="btn-mobile" onclick="confirmarOtp()">Confirmar →</button>
+  <div id="error-otp" class="error-msg"></div>
+</div>
+
+<div class="mobile-card hidden" id="step-exito">
+  <div class="success-icon">✅</div>
+  <h2>¡Asistencia Registrada!</h2>
+  <p class="sub">Bienvenido(a), <strong id="nombre-exito"></strong></p>
+  <div class="info-box">
+    <div>📅 <span id="fecha-exito"></span></div>
+    <div>🕐 <span id="hora-exito"></span></div>
+  </div>
+  <div id="tarde-aviso" class="hidden aviso-tarde">⚠ Registro tardío</div>
+</div>
+
+<input type="hidden" id="csrf" value="{{ csrf_token }}">
+
+<script src="{% static 'asistencia/js/registro.js' %}"></script>
+</body>
+</html>

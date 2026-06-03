@@ -1,0 +1,26 @@
+{% extends "asistencia/base.html" %}
+{% block title %}Técnicos{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Técnicos Autorizados</h1>
+  <form method="post" action="{% url 'importar_excel' %}" style="display:inline">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">📥 Importar desde Excel</button>
+  </form>
+</div>
+<table class="table">
+  <thead><tr><th>Cédula</th><th>Nombre</th><th>Celular</th><th>Estado</th></tr></thead>
+  <tbody>
+  {% for t in tecnicos %}
+  <tr>
+    <td>{{ t.cedula }}</td>
+    <td>{{ t.nombre }}</td>
+    <td>{{ t.celular }}</td>
+    <td><span class="badge {% if t.activo %}badge-validado{% else %}badge-rechazado{% endif %}">{% if t.activo %}Activo{% else %}Inactivo{% endif %}</span></td>
+  </tr>
+  {% empty %}
+  <tr><td colspan="4" class="empty-msg">No hay técnicos. Use "Importar desde Excel".</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
